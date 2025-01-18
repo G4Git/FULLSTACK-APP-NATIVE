@@ -5,13 +5,17 @@ const colors = require('colors')
 const morgan=require('morgan')
 const router = express.Router()
 const path =require('path')
-
+const ConnectDB=require('./config/db')
 
 // rest object
-const app = express()
+const app = express();
 
 // dot env
-dotenv.config()
+dotenv.config();
+
+// MONGO_URL
+ConnectDB();
+
 
 // middlewares
 app.use(cors())
