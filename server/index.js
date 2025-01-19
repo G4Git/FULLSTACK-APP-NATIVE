@@ -27,12 +27,7 @@ const Port = process.env.PORT
 
 // routes
 
-app.get('/', (req, res) => {
-    res.status(200).json({
-        sucess: true,
-        message:"Welcome to Full Stack App"
-    })
-})
+app.use('/api/v1/auth',require('./routes/userRouter'))
 
 
 // Server
