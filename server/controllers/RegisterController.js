@@ -7,7 +7,7 @@ const RegisterController = async (req,res) => {
         // 
         if (!name || !email)
         {
-            return req.status(400).send({
+            return res.status(400).send({
                 sucess: false,
                 message:"Name and Emial is Required"
             })
@@ -15,7 +15,7 @@ const RegisterController = async (req,res) => {
 
         if (!password || password.length<6)
             {
-                return req.status(400).send({
+                return res.status(400).send({
                     sucess: false,
                     message:"Password must be required more than 6"
                 })
@@ -24,21 +24,27 @@ const RegisterController = async (req,res) => {
         const userExist = await userModel.findOne({ email: email })
         if (userExist)
         {
-            return res.status(500).send({
+            return res.status(400).send({
                 sucess: false,
                 message:"User Already Exist"
             })
         }
-        
-        return res.status(500).send({
+        else
+        {
+            const user=await userModel({name,email,password}).save()
+        }
+       
+        return res.send({
             sucess: true,
             message:"User Created Sucessfully"
         }) 
+
+
     }
     catch (err)
     {
         console.log(err)
-        return res.status(500).send({
+        return res.status(400).send({
             sucess: false,
             message: "Error in Register API"
         })
