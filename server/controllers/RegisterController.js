@@ -1,4 +1,4 @@
-const { hashpassword } = require("../helper/hashpass")
+const { hashpassword, comparepassword } = require("../helper/hashpass")
 const userModel = require("../models/userSchema")
 const RegisterController = async (req,res) => {
     try
@@ -51,5 +51,52 @@ const RegisterController = async (req,res) => {
         })
     }
 }
+const LoginController = async (req, res) => {
+    try
+    {
+        const { email, password } = req.body;
+        if (!email || !password)
+        {
+           return  res.status(500).send({
+                sucess: false,
+                message:"Email and Password can't be empty"
+            })
+        }
+        const user = await userModel.findOne({ email: email })
+        if (!user)
+        {
+            return res.status(500).send({
+                sucess: false,
+                message:"User not Found"
+            })
+        }
+        
+        //  match password;
+        const match = await comparepassword(password,user.password)
+        if (!match)
+        {
+            return res.status(500).send({
+                sucess: false,
+                message:"Password doesnt match"
+            })
+        }
 
-module.exports={RegisterController}
+        res.status(200).send({
+            sucess: true,
+            message: "Sucessfully login",
+            user
+        })
+
+    }
+    catch (err)
+    {
+    
+        console.log(err)
+        return res.status(500).send({
+            sucess: false,
+            message:"Error in Login Controller"
+        })
+    }
+}
+
+module.exports={RegisterController,LoginController}

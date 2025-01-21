@@ -19,7 +19,7 @@ exports.hashpassword = (password) => {
 }
 
 exports.comparepassword = (password, hashed) => {
-    return new Promise((resolve,reject) => {
-        bcrypt.compare(password,hash)
-    })
+    
+        bcrypt.compare(password,hashed)
+   
 }
