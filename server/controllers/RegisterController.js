@@ -1,5 +1,5 @@
+const { hashpassword } = require("../helper/hashpass")
 const userModel = require("../models/userSchema")
-
 const RegisterController = async (req,res) => {
     try
     {
@@ -31,7 +31,8 @@ const RegisterController = async (req,res) => {
         }
         else
         {
-            const user=await userModel({name,email,password}).save()
+            let hash= await hashpassword(password)
+            const user=await userModel({name,email,password:hash}).save()
         }
        
         return res.send({
