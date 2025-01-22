@@ -1,5 +1,7 @@
 const { hashpassword, comparepassword } = require("../helper/hashpass")
 const userModel = require("../models/userSchema")
+const jwt = require('jsonwebtoken')
+
 const RegisterController = async (req,res) => {
     try
     {
@@ -62,7 +64,7 @@ const LoginController = async (req, res) => {
                 message:"Email and Password can't be empty"
             })
         }
-        const user = await userModel.findOne({ email: email })
+        const user = await userModel.findOne({ email })
         if (!user)
         {
             return res.status(500).send({
@@ -80,10 +82,17 @@ const LoginController = async (req, res) => {
                 message:"Password doesnt match"
             })
         }
+        // Token
 
+        const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+            expiresIn:'7d'
+        })
+        // undefined password
+        user.password = undefined;
         res.status(200).send({
             sucess: true,
             message: "Sucessfully login",
+            token,
             user
         })
 

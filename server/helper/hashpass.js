@@ -10,7 +10,7 @@ exports.hashpassword = (password) => {
             bcrypt.hash(password, salt, (err, hash) => {
                 if (err)
                 {
-                    reject(err)
+                  reject(err)
                 }
                 resolve(hash)
             })
@@ -18,8 +18,8 @@ exports.hashpassword = (password) => {
   })  
 }
 
-exports.comparepassword = (password, hashed) => {
+exports.comparepassword =async (password, hashed) => {
     
-        bcrypt.compare(password,hashed)
+       return await bcrypt.compare(password,hashed)
    
 }
